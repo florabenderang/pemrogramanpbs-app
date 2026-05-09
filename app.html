@@ -283,7 +283,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
   <div class="scroll-area">
     <div class="night-wrap">
       <div class="n-header">
-        <p class="n-eyebrow">Benderang Hidup Indonesia</p>
+        <p class="n-eyebrow">Benderang Hidup</p>
         <p class="n-title" id="pilih-title">Selamat <em>malam</em></p>
         <p class="n-sub" id="pilih-date"></p>
       </div>
@@ -626,9 +626,16 @@ async function api(p) {
   const url = new URL(SCRIPT_URL);
   Object.entries(p).forEach(([k,v]) => url.searchParams.set(k, String(v)));
   try {
-    const r = await fetch(url.toString());
-    return await r.json();
-  } catch(e) { return { ok:false, error:'Koneksi gagal' }; }
+    const r = await fetch(url.toString(), {
+      redirect: 'follow',
+      method: 'GET',
+    });
+    const txt = await r.text();
+    try { return JSON.parse(txt); }
+    catch(e) { return { ok:false, error:'Respons tidak valid: ' + txt.slice(0,100) }; }
+  } catch(e) {
+    return { ok:false, error:'Koneksi gagal: ' + e.message };
+  }
 }
 
 // ── NAVIGATION ──
@@ -861,15 +868,30 @@ async function submitLaporan() {
   showToast('Laporan tersimpan ✓', true);
 }
 
-function goToMalam() {
-  if (S.sesi) goToNight();
-  else showScreen('screen-pilih');
-}
-async function goToNight() { await goToMalam_inner(); }
-async function goToMalam_inner() {
+async function goToMalam() {
+  if (!S.sesi) { showScreen('screen-pilih'); return; }
   S.kegiatan = [];
-  await goToMalam();
+  showScreen('screen-malam');
+  const tgl = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('malam-title').innerHTML = `<em>${S.nama}</em>`;
+  document.getElementById('malam-sub').textContent = tgl;
+
+  const [rKeg, rStatus] = await Promise.all([
+    api({ action:'getKegiatan' }),
+    api({ action:'getRencanaHariIni', sesiToken:S.sesi }),
+  ]);
+
+  if (rKeg.ok) { S.kegiatan = rKeg.data; renderMalamForm(); }
+
+  if (rStatus.ok && rStatus.sudahSubmit) {
+    document.getElementById('malam-done').style.display = '';
+    document.getElementById('malam-form').style.display = 'none';
+  } else {
+    document.getElementById('malam-done').style.display = 'none';
+    document.getElementById('malam-form').style.display = '';
+  }
 }
+async function goToNight() { await goToMalam(); }
 
 function doLogout() {
   if (S.sesi) api({ action:'logout', sesiToken:S.sesi });
