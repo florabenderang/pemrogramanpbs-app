@@ -403,7 +403,10 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
           <p class="n-title" id="malam-title"><em>Loading...</em></p>
           <p class="n-sub" id="malam-sub"></p>
         </div>
-        <button class="n-ghost" onclick="doLogout()" style="font-size:11px;padding:5px 10px;flex-shrink:0;margin-top:6px">Keluar</button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          <button class="n-ghost" onclick="doLogout()" style="font-size:11px;padding:5px 10px">Keluar</button>
+          <span style="font-size:36px;line-height:1;opacity:0.7">🌙</span>
+        </div>
       </div>
 
       <div class="n-done" id="malam-done" style="display:none">
@@ -442,7 +445,10 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
           <p class="d-title" id="siang-title">Loading...</p>
           <p class="d-sub" id="siang-sub"></p>
         </div>
-        <button class="d-ghost" onclick="goToMalam()" style="font-size:11px;padding:5px 10px;flex-shrink:0;margin-top:6px">← Kembali</button>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0">
+          <button class="d-ghost" onclick="goToMalam()" style="font-size:11px;padding:5px 10px">← Kembali</button>
+          <span style="font-size:36px;line-height:1;opacity:0.75">☀️</span>
+        </div>
       </div>
 
       <!-- Sudah lapor -->
