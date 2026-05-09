@@ -498,6 +498,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
       </div>
       <div class="g12"></div>
       <p style="font-size:12px;color:#c04040" id="adm-login-err"></p>
+      <p style="font-size:12px;color:var(--a-muted)" id="adm-login-info"></p>
       <div class="g8"></div>
       <button onclick="showScreen('screen-pilih')" style="font-size:12px;color:var(--a-muted);background:none;border:none;cursor:pointer">← Kembali</button>
     </div>
@@ -511,7 +512,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
   <div class="scroll-area">
     <div class="a-shell">
       <div class="a-topbar">
-        <span class="a-brand">Panel Admin <span>· PT Benderang Hidup</span></span>
+        <span class="a-brand">Panel Admin <span>· Pemrograman PBS</span></span>
         <button class="a-logout" onclick="admLogout()">Keluar</button>
       </div>
       <div class="a-tabs">
@@ -902,12 +903,16 @@ function updDots(ctx, n) {
 
 // ── ADMIN ──
 async function admDoLogin() {
+  document.getElementById('adm-login-err').textContent = '';
+  document.getElementById('adm-login-info').textContent = 'Memverifikasi...';
   const r = await api({ action:'adminLogin', pin:S.pins.adm });
+  document.getElementById('adm-login-info').textContent = '';
   if (!r.ok) {
     document.getElementById('adm-login-err').textContent = r.error || 'PIN salah';
     S.pins.adm = ''; updDots('adm', 0); return;
   }
   S.adminToken = r.adminToken;
+  localStorage.setItem('adminToken', r.adminToken);
   showScreen('screen-admin');
   admTab('kegiatan');
 }
