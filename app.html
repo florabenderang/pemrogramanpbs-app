@@ -720,29 +720,6 @@ async function doLogin() {
   await goToMalam();
 }
 
-// ── MALAM: FORM RENCANA ──
-async function goToMalam() {
-  showScreen('screen-malam');
-  const tgl = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
-  document.getElementById('malam-title').innerHTML = `<em>${S.nama}</em>`;
-  document.getElementById('malam-sub').textContent = tgl;
-
-  const [rKeg, rStatus] = await Promise.all([
-    api({ action:'getKegiatan' }),
-    api({ action:'getRencanaHariIni', sesiToken:S.sesi }),
-  ]);
-
-  if (rKeg.ok) { S.kegiatan = rKeg.data; renderMalamForm(); }
-
-  if (rStatus.ok && rStatus.sudahSubmit) {
-    document.getElementById('malam-done').style.display = '';
-    document.getElementById('malam-form').style.display = 'none';
-  } else {
-    document.getElementById('malam-done').style.display = 'none';
-    document.getElementById('malam-form').style.display = '';
-  }
-}
-
 function renderMalamForm() {
   document.getElementById('malam-kegiatan-list').innerHTML = S.kegiatan.map((k, i) => `
     <div style="margin-bottom:12px">
