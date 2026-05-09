@@ -62,12 +62,12 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
 }
 
 /* ── SCREENS ── */
-.screen{display:none;min-height:100vh;flex-direction:column}
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center}
 .screen.active{display:flex}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%}
 
 /* ════════════════ NIGHT STYLES ════════════════ */
-.night-wrap{max-width:420px;margin:0 auto;padding:0 22px 56px;width:100%}
+.night-wrap{max-width:480px;margin:0 auto;padding:0 28px 56px;width:100%}
 
 .n-header{padding:40px 0 24px;border-bottom:0.5px solid var(--n-rim);margin-bottom:28px}
 .n-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--n-muted);text-transform:uppercase;margin-bottom:7px}
@@ -104,7 +104,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
 .n-done p:last-child{font-size:12px;color:var(--n-muted)}
 
 /* ════════════════ DAY STYLES ════════════════ */
-.day-wrap{max-width:420px;margin:0 auto;padding:0 22px 56px;width:100%}
+.day-wrap{max-width:480px;margin:0 auto;padding:0 28px 56px;width:100%}
 
 .d-header{padding:36px 0 22px;border-bottom:0.5px solid var(--d-rim);margin-bottom:28px}
 .d-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--d-muted);text-transform:uppercase;margin-bottom:7px}
@@ -400,7 +400,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
 ══════════════════════════════════ -->
 <div id="screen-login" class="screen" style="background:var(--n-bg);color:var(--n-bright)">
   <div class="scroll-area">
-    <div class="night-wrap" style="text-align:center;padding-top:52px">
+    <div class="night-wrap" style="text-align:center;padding-top:52px;margin:0 auto">
       <div class="n-avatar" id="login-av">--</div>
       <p style="font-size:16px;font-weight:500;margin-bottom:5px" id="login-nama">–</p>
       <p style="font-size:13px;color:var(--n-dim);margin-bottom:0">Masukkan PIN 6 digit</p>
