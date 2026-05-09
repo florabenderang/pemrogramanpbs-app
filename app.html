@@ -586,7 +586,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCYHhq7REqVqyjTfYi8-BHE6wki0wQuGl2N-4pITLtrDkLAskKj1M8J-DU0-rL99aPMQ/exec";
+const SCRIPT_URL = "GANTI_DENGAN_URL_APPS_SCRIPT_DEPLOYMENT";
 
 // ── STATE ──
 const S = {
@@ -999,14 +999,14 @@ function karFilter() {
   renderKarTable(_karAll.filter(k => k.nama.toLowerCase().includes(q)));
 }
 function karModalAdd() {
-  document.getElementById('modal-nama').value = '';
-  document.getElementById('modal-kar').classList.add('open');
+  const nama = prompt('Nama lengkap karyawan:');
+  if (!nama || !nama.trim()) return;
+  karSave(nama.trim());
 }
-async function karSave() {
-  const nama = document.getElementById('modal-nama').value.trim();
+async function karSave(nama) {
   if (!nama) { showToast('Isi nama dulu'); return; }
   const r = await api({ action:'adminTambahKaryawan', adminToken:S.adminToken, nama });
-  if (r.ok) { showToast('Karyawan ditambahkan ✓'); modalClose('modal-kar'); admLoadKar(); }
+  if (r.ok) { showToast('Karyawan ditambahkan ✓'); admLoadKar(); }
   else showToast(r.error || 'Gagal');
 }
 async function karReset(id, nama) {
