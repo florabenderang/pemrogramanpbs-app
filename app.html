@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kegiatan Harian · Benderang</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* ── NIGHT THEME (malam) ── */
+:root{
+  --n-bg:    #0e0d16;
+  --n-bg2:   #16141f;
+  --n-bg3:   #1e1c2a;
+  --n-bg4:   #252338;
+  --n-rim:   rgba(255,255,255,0.07);
+  --n-rim2:  rgba(255,255,255,0.13);
+  --n-muted: #4a4665;
+  --n-dim:   #6b6585;
+  --n-soft:  #b0a8cc;
+  --n-bright:#e4dff5;
+  --n-acc:   #8b7ce8;
+  --n-acc2:  #6b5fd0;
+  --n-acbg:  rgba(139,124,232,0.12);
+  --n-acbg2: rgba(139,124,232,0.22);
+  --n-ok:    #4cae87;
+  --n-warn:  #e8a838;
+  --n-err:   #e06060;
+}
+
+/* ── DAY THEME (siang) ── */
+:root{
+  --d-bg:    #faf8f4;
+  --d-bg2:   #f3efe8;
+  --d-bg3:   #ece7dc;
+  --d-rim:   #ddd8ce;
+  --d-rim2:  #c8c2b5;
+  --d-txt:   #2c2820;
+  --d-muted: #8c8070;
+  --d-dim:   #6a6058;
+  --d-acc:   #7a6340;
+  --d-acc2:  #5c4a2c;
+  --d-acbg:  rgba(122,99,64,0.1);
+  --d-acbg2: rgba(122,99,64,0.18);
+  --d-ok:    #3a8c5a;
+  --d-warn:  #c88a20;
+  --d-err:   #c04040;
+}
+
+/* ── ADMIN THEME ── */
+:root{
+  --a-bg:    #f6f5f9;
+  --a-card:  #ffffff;
+  --a-rim:   #e4e2ec;
+  --a-txt:   #1a1830;
+  --a-muted: #7a7890;
+  --a-acc:   #6b5fd0;
+  --a-acbg:  #eeebfb;
+}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* ════════════════ NIGHT STYLES ════════════════ */
+.night-wrap{max-width:420px;margin:0 auto;padding:0 22px 56px;width:100%}
+
+.n-header{padding:40px 0 24px;border-bottom:0.5px solid var(--n-rim);margin-bottom:28px}
+.n-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--n-muted);text-transform:uppercase;margin-bottom:7px}
+.n-title{font-size:24px;font-weight:300;color:var(--n-bright);letter-spacing:-.4px;line-height:1.2;font-family:'DM Serif Display',serif;font-style:italic}
+.n-title b{font-style:normal;font-family:'DM Sans',sans-serif;font-weight:500;font-size:18px}
+.n-sub{font-size:13px;color:var(--n-dim);margin-top:6px}
+
+.n-label{font-size:10px;letter-spacing:.12em;color:var(--n-muted);text-transform:uppercase;margin-bottom:8px;display:block}
+.n-select,.n-input{width:100%;background:var(--n-bg2);border:0.5px solid var(--n-rim2);border-radius:10px;color:var(--n-bright);font-size:14px;font-family:'DM Sans',sans-serif;padding:11px 14px;outline:none;appearance:none;transition:border-color .2s}
+.n-select:focus,.n-input:focus{border-color:var(--n-acc)}
+.n-select option{background:var(--n-bg2)}
+
+.n-textarea{width:100%;background:var(--n-bg);border:0.5px solid var(--n-rim);border-radius:8px;color:var(--n-soft);font-size:13px;font-family:'DM Sans',sans-serif;line-height:1.65;padding:10px 12px;resize:none;outline:none;min-height:76px;transition:border-color .2s}
+.n-textarea::placeholder{color:var(--n-muted)}
+.n-textarea:focus{border-color:rgba(139,124,232,.3)}
+
+.n-btn{width:100%;background:var(--n-acbg2);border:0.5px solid rgba(139,124,232,.4);border-radius:10px;color:#c8b8ff;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;padding:13px;cursor:pointer;transition:background .2s,border-color .2s}
+.n-btn:hover{background:rgba(139,124,232,.3);border-color:rgba(139,124,232,.6)}
+.n-btn:active{transform:scale(.99)}
+.n-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.n-ghost{background:transparent;border:0.5px solid var(--n-rim2);border-radius:8px;color:var(--n-dim);font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 14px;cursor:pointer;transition:background .15s}
+.n-ghost:hover{background:var(--n-bg3);color:var(--n-soft)}
+
+/* activity card night */
+.act-card{background:var(--n-bg2);border:0.5px solid var(--n-rim);border-radius:12px;padding:16px 17px;margin-bottom:11px;transition:border-color .2s}
+.act-card:focus-within{border-color:rgba(139,124,232,.35)}
+.act-name{font-size:11px;font-weight:500;color:var(--n-acc);margin-bottom:10px;display:flex;align-items:center;gap:7px;letter-spacing:.04em;text-transform:uppercase}
+.act-dot{width:4px;height:4px;border-radius:50%;background:var(--n-acc2);flex-shrink:0}
+
+/* done banner night */
+.n-done{background:var(--n-acbg);border:0.5px solid rgba(139,124,232,.25);border-radius:12px;padding:18px;text-align:center;margin-bottom:20px}
+.n-done p:first-child{font-size:13px;font-weight:500;color:var(--n-acc);margin-bottom:4px}
+.n-done p:last-child{font-size:12px;color:var(--n-muted)}
+
+/* ════════════════ DAY STYLES ════════════════ */
+.day-wrap{max-width:420px;margin:0 auto;padding:0 22px 56px;width:100%}
+
+.d-header{padding:36px 0 22px;border-bottom:0.5px solid var(--d-rim);margin-bottom:28px}
+.d-eyebrow{font-size:10px;letter-spacing:.18em;color:var(--d-muted);text-transform:uppercase;margin-bottom:7px}
+.d-title{font-size:22px;font-family:'DM Serif Display',serif;color:var(--d-txt);letter-spacing:-.2px;line-height:1.2}
+.d-sub{font-size:13px;color:var(--d-muted);margin-top:5px}
+
+.d-label{font-size:10px;letter-spacing:.12em;color:var(--d-muted);text-transform:uppercase;margin-bottom:8px;display:block}
+
+.d-btn{width:100%;background:var(--d-acbg2);border:0.5px solid rgba(122,99,64,.4);border-radius:10px;color:var(--d-acc2);font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;padding:13px;cursor:pointer;transition:background .2s}
+.d-btn:hover{background:rgba(122,99,64,.26)}
+.d-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.d-ghost{background:transparent;border:0.5px solid var(--d-rim);border-radius:8px;color:var(--d-muted);font-size:13px;font-family:'DM Sans',sans-serif;padding:8px 14px;cursor:pointer;transition:background .15s}
+.d-ghost:hover{background:var(--d-bg2);color:var(--d-dim)}
+
+/* laporan card */
+.lap-card{background:#fff;border:0.5px solid var(--d-rim);border-radius:12px;padding:18px 18px 16px;margin-bottom:12px}
+.lap-cat{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--d-muted);margin-bottom:8px}
+.lap-question{font-size:14px;color:var(--d-txt);line-height:1.6;margin-bottom:14px;font-style:italic;border-left:2px solid var(--d-rim2);padding-left:12px}
+.lap-scale-label{font-size:11px;color:var(--d-muted);margin-bottom:8px}
+.lap-input-wrap{display:flex;align-items:center;gap:10px}
+.lap-number{width:80px;border:0.5px solid var(--d-rim2);border-radius:8px;font-size:22px;font-weight:500;font-family:'DM Mono',monospace;color:var(--d-acc);text-align:center;padding:8px 6px;outline:none;background:var(--d-bg);transition:border-color .2s}
+.lap-number:focus{border-color:var(--d-acc)}
+.lap-scale-hint{font-size:12px;color:var(--d-muted);line-height:1.4}
+
+/* locked card */
+.d-locked{background:var(--d-bg2);border:0.5px solid var(--d-rim);border-radius:12px;padding:22px 20px;text-align:center}
+.d-locked-icon{font-size:28px;margin-bottom:12px;opacity:.4}
+.d-locked p:first-of-type{font-size:14px;font-weight:500;color:var(--d-txt);margin-bottom:6px}
+.d-locked p:last-of-type{font-size:13px;color:var(--d-muted);line-height:1.5}
+
+/* done banner day */
+.d-done{background:#f0f8f3;border:0.5px solid #b8dfc8;border-radius:12px;padding:18px;text-align:center;margin-bottom:20px}
+.d-done p:first-child{font-size:13px;font-weight:500;color:var(--d-ok);margin-bottom:4px}
+.d-done p:last-child{font-size:12px;color:var(--d-muted)}
+
+/* tab strip */
+.tab-strip{display:flex;gap:0;border-bottom:0.5px solid}
+.tab-item{font-size:13px;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s}
+
+/* ════════════════ PIN / NUMPAD ════════════════ */
+.pin-dots{display:flex;gap:12px;justify-content:center;margin:28px 0 24px}
+.pin-dot{width:13px;height:13px;border-radius:50%;border:0.5px solid;background:transparent;transition:background .12s,border-color .12s}
+.pin-dot.n-mode{border-color:var(--n-muted)}
+.pin-dot.n-mode.filled{background:var(--n-acc);border-color:var(--n-acc)}
+.pin-dot.d-mode{border-color:#bbb}
+.pin-dot.d-mode.filled{background:var(--d-acc);border-color:var(--d-acc)}
+
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:260px;margin:0 auto}
+.num-btn{border-radius:11px;height:56px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:300;cursor:pointer;user-select:none;transition:background .1s;border:0.5px solid}
+.num-btn:active{transform:scale(.96)}
+.num-btn.empty{background:transparent!important;border:none!important;cursor:default;pointer-events:none}
+.num-btn.del{font-size:17px}
+
+.night-num{background:var(--n-bg2);border-color:var(--n-rim);color:var(--n-bright)}
+.night-num:hover{background:var(--n-bg3)}
+.day-num{background:#f0ece4;border-color:#ddd8ce;color:#3a3020}
+.day-num:hover{background:#e8e2d8}
+.day-del{color:#aaa}
+.night-del{color:var(--n-muted)}
+
+/* avatar */
+.n-avatar{width:52px;height:52px;border-radius:50%;background:var(--n-acbg2);border:0.5px solid rgba(139,124,232,.3);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;color:var(--n-acc);margin:0 auto 14px;font-family:'DM Mono',monospace}
+
+/* step dots */
+.step-row{display:flex;align-items:center;gap:8px;margin-bottom:24px}
+.sdot{width:6px;height:6px;border-radius:50%}
+.sdot.on{background:var(--n-acc)}
+.sdot.off{background:var(--n-bg4)}
+.sline{flex:1;height:.5px;background:var(--n-bg4)}
+.stxt{font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.stxt.on{color:var(--n-acc)}
+.stxt.off{color:var(--n-muted)}
+
+/* WA input */
+.wa-wrap{display:flex}
+.wa-pre{background:var(--n-bg3);border:0.5px solid var(--n-rim2);border-right:none;border-radius:10px 0 0 10px;color:var(--n-dim);font-size:13px;padding:11px 12px;display:flex;align-items:center;white-space:nowrap}
+.wa-in{flex:1;background:var(--n-bg2);border:0.5px solid var(--n-rim2);border-left:none;border-radius:0 10px 10px 0;color:var(--n-bright);font-size:14px;font-family:'DM Mono',monospace;padding:11px 13px;outline:none}
+.wa-in:focus{border-color:var(--n-acc)}
+.wa-in::placeholder{color:var(--n-muted);font-family:'DM Sans',sans-serif}
+
+/* notice */
+.notice{font-size:12px;text-align:center;margin-top:10px;line-height:1.6;color:var(--n-dim)}
+.notice.err{color:var(--n-err)}
+.notice.ok{color:var(--n-ok)}
+
+/* success */
+.success-wrap{text-align:center;padding:8px 0}
+.success-ring{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:24px}
+.n-ring{background:rgba(76,174,135,.15);border:0.5px solid rgba(76,174,135,.3);color:var(--n-ok)}
+.d-ring{background:#e8f5ee;border:0.5px solid #b8dfc8;color:var(--d-ok)}
+
+/* gaps */
+.g8{height:8px}.g12{height:12px}.g16{height:16px}.g20{height:20px}.g24{height:24px}.g32{height:32px}
+
+/* ════════════════ ADMIN ════════════════ */
+#screen-admin{background:var(--a-bg);color:var(--a-txt)}
+.a-shell{max-width:780px;margin:0 auto;padding:0 20px 48px}
+.a-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:0.5px solid var(--a-rim);margin-bottom:24px}
+.a-brand{font-size:14px;font-weight:500;color:var(--a-txt)}
+.a-brand span{color:var(--a-muted);font-weight:400}
+.a-logout{font-size:12px;color:var(--a-muted);cursor:pointer;padding:5px 10px;border-radius:6px;border:0.5px solid var(--a-rim);background:none;font-family:'DM Sans',sans-serif}
+.a-logout:hover{background:var(--a-rim)}
+.a-tabs{display:flex;border-bottom:0.5px solid var(--a-rim);margin-bottom:24px}
+.a-tab{font-size:13px;padding:9px 15px;color:var(--a-muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s}
+.a-tab:hover{color:var(--a-txt)}
+.a-tab.on{color:var(--a-txt);border-bottom-color:var(--a-acc);font-weight:500}
+.a-card{background:var(--a-card);border:0.5px solid var(--a-rim);border-radius:12px;padding:20px;margin-bottom:16px}
+.a-stitle{font-size:13px;font-weight:500;color:var(--a-txt);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.a-badge{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--a-acbg);color:var(--a-acc)}
+.keg-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.keg-num{font-size:12px;color:var(--a-muted);min-width:18px;text-align:right}
+.a-field{flex:1;padding:9px 12px;border:0.5px solid var(--a-rim);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--a-txt);background:var(--a-bg);outline:none;transition:border-color .15s}
+.a-field:focus{border-color:var(--a-acc)}
+.keg-del{color:var(--a-muted);cursor:pointer;font-size:19px;padding:2px 4px;transition:color .15s;line-height:1}
+.keg-del:hover{color:#c04040}
+.a-addbtn{font-size:12px;color:var(--a-muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;padding:4px 0;margin-top:2px}
+.a-addbtn:hover{color:var(--a-acc)}
+.a-save{float:right;background:var(--a-acbg);border:0.5px solid rgba(107,95,208,.35);border-radius:8px;color:var(--a-acc);font-size:13px;font-weight:500;padding:8px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:10px}
+.a-save:hover{background:#e2ddf8}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.stat-box{background:var(--a-bg);border-radius:8px;padding:14px 16px}
+.stat-lbl{font-size:11px;color:var(--a-muted);margin-bottom:4px}
+.stat-val{font-size:26px;font-weight:500;color:var(--a-txt)}
+.stat-sub{font-size:11px;color:var(--a-muted);margin-top:2px}
+.a-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.a-search{display:flex;align-items:center;gap:8px;background:var(--a-card);border:0.5px solid var(--a-rim);border-radius:8px;padding:7px 12px;flex:1;max-width:220px}
+.a-search input{border:none;background:transparent;font-size:13px;color:var(--a-txt);outline:none;width:100%;font-family:'DM Sans',sans-serif}
+.a-add{display:flex;align-items:center;gap:6px;background:var(--a-acbg);border:0.5px solid rgba(107,95,208,.35);border-radius:8px;color:var(--a-acc);font-size:13px;font-weight:500;padding:7px 14px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.a-add:hover{background:#e2ddf8}
+.a-table{width:100%;border-collapse:collapse}
+.a-table th{font-size:11px;color:var(--a-muted);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:0.5px solid var(--a-rim);font-weight:400}
+.a-table td{padding:11px 12px;font-size:13px;border-bottom:0.5px solid var(--a-rim);vertical-align:middle}
+.a-table tr:last-child td{border-bottom:none}
+.a-table tr:hover td{background:var(--a-bg)}
+.ps{font-size:11px;padding:3px 9px;border-radius:99px;display:inline-flex;align-items:center;gap:4px}
+.ps-ok{background:#e8f5ee;color:#2a7a50}
+.ps-wait{background:#fef3e2;color:#956a10}
+.ico-btn{background:none;border:none;cursor:pointer;font-size:15px;color:var(--a-muted);padding:3px 5px;border-radius:5px}
+.ico-btn:hover{color:var(--a-txt);background:var(--a-bg)}
+.ico-btn.del:hover{color:#c04040}
+.check-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--a-rim);font-size:13px}
+.check-row:last-child{border-bottom:none}
+.check-name{flex:1;color:var(--a-txt)}
+.check-time{font-size:11px;color:var(--a-muted);font-family:'DM Mono',monospace}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cdot-ok{background:#3daa70}
+.cdot-no{background:#e8a838}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+.modal-ov{display:none;min-height:360px;background:rgba(20,18,40,.5);align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--a-card);border:0.5px solid var(--a-rim);border-radius:14px;padding:24px;width:100%;max-width:380px}
+.modal-title{font-size:15px;font-weight:500;margin-bottom:18px;color:var(--a-txt)}
+.m-field{width:100%;padding:9px 12px;border:0.5px solid var(--a-rim);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--a-txt);outline:none;margin-bottom:12px}
+.m-field:focus{border-color:var(--a-acc)}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px}
+.m-cancel{font-size:13px;color:var(--a-muted);cursor:pointer;padding:8px 14px;border-radius:7px;border:0.5px solid var(--a-rim);background:none;font-family:'DM Sans',sans-serif}
+.m-cancel:hover{background:var(--a-bg)}
+.m-ok{font-size:13px;font-weight:500;background:var(--a-acbg);border:0.5px solid rgba(107,95,208,.35);border-radius:7px;color:var(--a-acc);padding:8px 18px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.m-ok:hover{background:#e2ddf8}
+
+/* toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2a2840;border:0.5px solid rgba(255,255,255,.13);color:#c8c2dc;font-size:13px;padding:10px 22px;border-radius:99px;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;z-index:999}
+#toast.day{background:#3a3020;color:#e8e0d0}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════
+     SCREEN: PILIH NAMA (malam)
+══════════════════════════════════ -->
+<div id="screen-pilih" class="screen active" style="background:var(--n-bg);color:var(--n-bright)">
+  <div class="scroll-area">
+    <div class="night-wrap">
+      <div class="n-header">
+        <p class="n-eyebrow">Benderang Hidup</p>
+        <p class="n-title" id="pilih-title">Selamat <em>malam</em></p>
+        <p class="n-sub" id="pilih-date"></p>
+      </div>
+      <span class="n-label">Siapa kamu?</span>
+      <select class="n-select" id="sel-nama" style="margin-bottom:8px">
+        <option value="">Memuat daftar...</option>
+      </select>
+      <div class="g16"></div>
+      <button class="n-btn" onclick="lanjutDariPilih()">Lanjut</button>
+      <div class="g24"></div>
+      <div style="text-align:center">
+        <button class="n-ghost" style="font-size:12px" onclick="showScreen('screen-admin-login')">Masuk sebagai admin</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: REGISTRASI (malam)
+══════════════════════════════════ -->
+<div id="screen-registrasi" class="screen" style="background:var(--n-bg);color:var(--n-bright)">
+  <div class="scroll-area">
+    <div class="night-wrap">
+      <div class="n-header">
+        <p class="n-eyebrow">Pertama kali</p>
+        <p class="n-title">Daftarkan <em>akunmu</em></p>
+        <p class="n-sub">Hanya perlu dilakukan sekali</p>
+      </div>
+      <div class="step-row">
+        <span class="sdot on"></span><span class="stxt on">Profil</span>
+        <span class="sline"></span>
+        <span class="sdot off" id="s2d"></span><span class="stxt off" id="s2t">PIN</span>
+        <span class="sline"></span>
+        <span class="sdot off" id="s3d"></span><span class="stxt off" id="s3t">Selesai</span>
+      </div>
+
+      <!-- step 1: WA -->
+      <div id="reg-s1">
+        <span class="n-label">Nomor WhatsApp kamu</span>
+        <div class="wa-wrap">
+          <div class="wa-pre">+62</div>
+          <input class="wa-in" type="tel" id="reg-wa" placeholder="812 3456 7890">
+        </div>
+        <div class="g16"></div>
+        <p class="notice">Nomor ini untuk menerima notifikasi harian</p>
+        <div class="g16"></div>
+        <button class="n-btn" onclick="regToPin()">Lanjut</button>
+      </div>
+
+      <!-- step 2: PIN -->
+      <div id="reg-s2" style="display:none;text-align:center">
+        <p style="font-size:13px;color:var(--n-dim);margin-bottom:4px">Buat PIN 6 digit</p>
+        <p style="font-size:12px;color:var(--n-muted)">Kamu akan pakai ini setiap login</p>
+        <div class="pin-dots" id="reg-dots">
+          <div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div>
+          <div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div>
+        </div>
+        <div class="numpad">
+          <div class="num-btn night-num" onclick="pinIn('reg','1')">1</div><div class="num-btn night-num" onclick="pinIn('reg','2')">2</div><div class="num-btn night-num" onclick="pinIn('reg','3')">3</div>
+          <div class="num-btn night-num" onclick="pinIn('reg','4')">4</div><div class="num-btn night-num" onclick="pinIn('reg','5')">5</div><div class="num-btn night-num" onclick="pinIn('reg','6')">6</div>
+          <div class="num-btn night-num" onclick="pinIn('reg','7')">7</div><div class="num-btn night-num" onclick="pinIn('reg','8')">8</div><div class="num-btn night-num" onclick="pinIn('reg','9')">9</div>
+          <div class="num-btn empty"></div><div class="num-btn night-num" onclick="pinIn('reg','0')">0</div><div class="num-btn night-num night-del del" onclick="pinDel('reg')">⌫</div>
+        </div>
+        <p class="notice err" id="reg-err" style="margin-top:12px"></p>
+      </div>
+
+      <!-- step 3: selesai -->
+      <div id="reg-s3" style="display:none">
+        <div class="success-wrap">
+          <div class="success-ring n-ring">✓</div>
+          <p style="font-size:16px;font-weight:500;color:var(--n-bright);margin-bottom:8px">Akun berhasil dibuat!</p>
+          <p class="notice">Selamat datang. Kamu bisa mulai isi rencanamu malam ini.</p>
+          <div class="g24"></div>
+          <button class="n-btn" onclick="goToNight()">Mulai →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: LOGIN PIN (malam)
+══════════════════════════════════ -->
+<div id="screen-login" class="screen" style="background:var(--n-bg);color:var(--n-bright)">
+  <div class="scroll-area">
+    <div class="night-wrap" style="text-align:center;padding-top:52px">
+      <div class="n-avatar" id="login-av">--</div>
+      <p style="font-size:16px;font-weight:500;margin-bottom:5px" id="login-nama">–</p>
+      <p style="font-size:13px;color:var(--n-dim)">Masukkan PIN 6 digit</p>
+      <div class="pin-dots" id="login-dots">
+        <div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div>
+        <div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div><div class="pin-dot n-mode"></div>
+      </div>
+      <div class="numpad">
+        <div class="num-btn night-num" onclick="pinIn('login','1')">1</div><div class="num-btn night-num" onclick="pinIn('login','2')">2</div><div class="num-btn night-num" onclick="pinIn('login','3')">3</div>
+        <div class="num-btn night-num" onclick="pinIn('login','4')">4</div><div class="num-btn night-num" onclick="pinIn('login','5')">5</div><div class="num-btn night-num" onclick="pinIn('login','6')">6</div>
+        <div class="num-btn night-num" onclick="pinIn('login','7')">7</div><div class="num-btn night-num" onclick="pinIn('login','8')">8</div><div class="num-btn night-num" onclick="pinIn('login','9')">9</div>
+        <div class="num-btn empty"></div><div class="num-btn night-num" onclick="pinIn('login','0')">0</div><div class="num-btn night-num night-del del" onclick="pinDel('login')">⌫</div>
+      </div>
+      <div class="g16"></div>
+      <p class="notice err" id="login-err"></p>
+      <div class="g8"></div>
+      <button class="n-ghost" onclick="showScreen('screen-pilih')" style="margin:0 auto;display:block">Bukan saya</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: MALAM — FORM RENCANA
+══════════════════════════════════ -->
+<div id="screen-malam" class="screen" style="background:var(--n-bg);color:var(--n-bright)">
+  <div class="scroll-area">
+    <div class="night-wrap">
+      <div class="n-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <p class="n-eyebrow">Rencana malam ini</p>
+          <p class="n-title" id="malam-title"><em>Loading...</em></p>
+          <p class="n-sub" id="malam-sub"></p>
+        </div>
+        <button class="n-ghost" onclick="doLogout()" style="font-size:11px;padding:5px 10px;flex-shrink:0;margin-top:6px">Keluar</button>
+      </div>
+
+      <div class="n-done" id="malam-done" style="display:none">
+        <p>Rencana malam ini sudah tersimpan ✓</p>
+        <p>Lakukan sekarang sebelum tidur ya 🌙</p>
+      </div>
+
+      <div id="malam-form">
+        <p style="font-size:13px;color:var(--n-dim);margin-bottom:20px;line-height:1.6">
+          Tulis apa yang akan kamu lakukan malam ini untuk setiap kegiatan di bawah.
+        </p>
+        <div id="malam-kegiatan-list"></div>
+        <div class="g8"></div>
+        <button class="n-btn" id="btn-simpan-malam" onclick="submitRencana()">Simpan rencana malam ini</button>
+        <p class="notice" style="margin-top:10px">Lakukan segera setelah ini · tidak ada aktivitas lain sebelum tidur 🌙</p>
+      </div>
+
+      <div class="g24"></div>
+      <div style="text-align:center;border-top:0.5px solid var(--n-rim);padding-top:20px">
+        <p style="font-size:11px;color:var(--n-muted);margin-bottom:10px">Ada laporan untuk kemarin?</p>
+        <button class="n-ghost" style="font-size:12px" onclick="goToSiang()">Ke form laporan siang →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: SIANG — FORM LAPORAN
+══════════════════════════════════ -->
+<div id="screen-siang" class="screen" style="background:var(--d-bg);color:var(--d-txt)">
+  <div class="scroll-area">
+    <div class="day-wrap">
+      <div class="d-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <p class="d-eyebrow">Laporan kemarin</p>
+          <p class="d-title" id="siang-title">Loading...</p>
+          <p class="d-sub" id="siang-sub"></p>
+        </div>
+        <button class="d-ghost" onclick="goToMalam()" style="font-size:11px;padding:5px 10px;flex-shrink:0;margin-top:6px">← Kembali</button>
+      </div>
+
+      <!-- Sudah lapor -->
+      <div class="d-done" id="siang-done" style="display:none">
+        <p>Laporan kemarin sudah tersimpan ✓</p>
+        <p>Terima kasih sudah konsisten!</p>
+      </div>
+
+      <!-- Dikunci: belum ada rencana kemarin -->
+      <div class="d-locked" id="siang-locked" style="display:none">
+        <div class="d-locked-icon">🔒</div>
+        <p>Laporan belum bisa dibuka</p>
+        <p>Kamu tidak mengisi rencana kemarin malam, sehingga tidak ada yang bisa dilaporkan hari ini.<br><br>Isi rencana malam ini agar bisa lapor besok.</p>
+      </div>
+
+      <!-- Form laporan -->
+      <div id="siang-form" style="display:none">
+        <p style="font-size:13px;color:var(--d-muted);margin-bottom:22px;line-height:1.6">
+          Seberapa besar kamu menikmati setiap kegiatan yang kamu lakukan kemarin?<br>
+          <span style="font-size:12px">Tulis angka dari 1 sampai 100.</span>
+        </p>
+        <div id="siang-laporan-list"></div>
+        <div class="g8"></div>
+        <span class="d-label">Catatan (opsional)</span>
+        <input type="text" id="lap-catatan" placeholder="Ada yang ingin dicatat?" style="width:100%;border:0.5px solid var(--d-rim2);border-radius:9px;padding:10px 13px;font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--d-txt);outline:none;margin-bottom:16px">
+        <button class="d-btn" id="btn-simpan-siang" onclick="submitLaporan()">Simpan laporan</button>
+        <p style="font-size:12px;color:var(--d-muted);text-align:center;margin-top:10px;line-height:1.5">
+          Jawabanmu akan digunakan untuk evaluasi mingguan dan bulanan
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: ADMIN LOGIN
+══════════════════════════════════ -->
+<div id="screen-admin-login" class="screen" style="background:var(--a-bg);color:var(--a-txt)">
+  <div class="scroll-area">
+    <div style="max-width:320px;margin:0 auto;padding:60px 20px 40px;text-align:center">
+      <p style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--a-muted);margin-bottom:8px">Panel Admin</p>
+      <p style="font-size:20px;font-weight:500;color:var(--a-txt);margin-bottom:4px">Benderang Hidup</p>
+      <p style="font-size:13px;color:var(--a-muted);margin-bottom:32px">Masukkan PIN admin</p>
+      <div class="pin-dots" id="adm-dots">
+        <div class="pin-dot d-mode"></div><div class="pin-dot d-mode"></div><div class="pin-dot d-mode"></div>
+        <div class="pin-dot d-mode"></div><div class="pin-dot d-mode"></div><div class="pin-dot d-mode"></div>
+      </div>
+      <div class="numpad" style="max-width:240px;margin:0 auto">
+        <div class="num-btn day-num" onclick="pinIn('adm','1')">1</div><div class="num-btn day-num" onclick="pinIn('adm','2')">2</div><div class="num-btn day-num" onclick="pinIn('adm','3')">3</div>
+        <div class="num-btn day-num" onclick="pinIn('adm','4')">4</div><div class="num-btn day-num" onclick="pinIn('adm','5')">5</div><div class="num-btn day-num" onclick="pinIn('adm','6')">6</div>
+        <div class="num-btn day-num" onclick="pinIn('adm','7')">7</div><div class="num-btn day-num" onclick="pinIn('adm','8')">8</div><div class="num-btn day-num" onclick="pinIn('adm','9')">9</div>
+        <div class="num-btn empty"></div><div class="num-btn day-num" onclick="pinIn('adm','0')">0</div><div class="num-btn day-num day-del del" onclick="pinDel('adm')">⌫</div>
+      </div>
+      <div class="g12"></div>
+      <p style="font-size:12px;color:#c04040" id="adm-login-err"></p>
+      <div class="g8"></div>
+      <button onclick="showScreen('screen-pilih')" style="font-size:12px;color:var(--a-muted);background:none;border:none;cursor:pointer">← Kembali</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SCREEN: ADMIN DASHBOARD
+══════════════════════════════════ -->
+<div id="screen-admin" class="screen" style="background:var(--a-bg)">
+  <div class="scroll-area">
+    <div class="a-shell">
+      <div class="a-topbar">
+        <span class="a-brand">Panel Admin <span>· PT Benderang Hidup</span></span>
+        <button class="a-logout" onclick="admLogout()">Keluar</button>
+      </div>
+      <div class="a-tabs">
+        <div class="a-tab on" onclick="admTab('kegiatan')">Kegiatan</div>
+        <div class="a-tab" onclick="admTab('status')">Status malam</div>
+        <div class="a-tab" onclick="admTab('karyawan')">Karyawan</div>
+      </div>
+
+      <!-- TAB KEGIATAN -->
+      <div id="adm-kegiatan" class="tab-pane on">
+        <div class="a-card">
+          <div class="a-stitle">Nama kegiatan umum <span class="a-badge">Berlaku sekarang</span></div>
+          <p style="font-size:12px;color:var(--a-muted);margin-bottom:16px;line-height:1.6">
+            Nama umum ini menjadi kategori laporan. Karyawan akan menulis detailnya sendiri saat mengisi rencana malam.
+          </p>
+          <div id="keg-editor"></div>
+          <button class="a-addbtn" onclick="kegAdd()">+ Tambah kegiatan</button>
+          <div style="overflow:hidden">
+            <button class="a-save" onclick="kegSave()">Simpan &amp; berlakukan sekarang</button>
+          </div>
+          <p style="font-size:11px;color:var(--a-muted);margin-top:44px;clear:both;line-height:1.5">
+            Perubahan langsung terlihat di form karyawan. Maksimal 3 kegiatan aktif per malam.
+          </p>
+        </div>
+      </div>
+
+      <!-- TAB STATUS -->
+      <div id="adm-status" class="tab-pane">
+        <div class="a-card">
+          <div class="a-stitle">Status submit malam ini</div>
+          <div class="stat-grid">
+            <div class="stat-box"><div class="stat-lbl">Sudah submit</div><div class="stat-val" id="st-sudah">–</div><div class="stat-sub">rencana malam</div></div>
+            <div class="stat-box"><div class="stat-lbl">Belum submit</div><div class="stat-val" id="st-belum" style="color:var(--d-warn)">–</div><div class="stat-sub">notif jam 22.15</div></div>
+          </div>
+          <div id="status-list"><div style="text-align:center;padding:24px 0;font-size:13px;color:var(--a-muted)">Memuat data...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB KARYAWAN -->
+      <div id="adm-karyawan" class="tab-pane">
+        <div class="a-card">
+          <div class="a-toolbar">
+            <div class="a-search">
+              <span style="color:var(--a-muted);font-size:14px">⌕</span>
+              <input type="text" placeholder="Cari nama..." id="kar-q" oninput="karFilter()">
+            </div>
+            <button class="a-add" onclick="karModalAdd()">+ Tambah karyawan</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="a-table">
+              <thead><tr><th>Nama</th><th>WhatsApp</th><th>Status</th><th></th></tr></thead>
+              <tbody id="kar-tbody"><tr><td colspan="4" style="text-align:center;padding:24px;font-size:13px;color:var(--a-muted)">Memuat...</td></tr></tbody>
+            </table>
+          </div>
+          <p style="font-size:11px;color:var(--a-muted);margin-top:10px" id="kar-footer"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH KARYAWAN -->
+<div class="modal-ov" id="modal-kar">
+  <div class="modal-box">
+    <p class="modal-title">Tambah karyawan</p>
+    <input class="m-field" type="text" id="modal-nama" placeholder="Nama lengkap">
+    <div class="modal-foot">
+      <button class="m-cancel" onclick="modalClose('modal-kar')">Batal</button>
+      <button class="m-ok" onclick="karSave()">Tambahkan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCYHhq7REqVqyjTfYi8-BHE6wki0wQuGl2N-4pITLtrDkLAskKj1M8J-DU0-rL99aPMQ/exec";
+
+// ── STATE ──
+const S = {
+  nama: null, id: null, sesi: null, adminToken: null,
+  kegiatan: [],
+  rencanaKemarin: null, // array detil dari rencana kemarin
+  pins: { reg:'', login:'', adm:'' },
+  _karAll: [],
+};
+
+// ── BOOT ──
+window.addEventListener('load', async () => {
+  setGreeting();
+  await loadNama();
+  const tok = localStorage.getItem('sesi');
+  if (tok) {
+    const r = await api({ action:'cekSesi', sesiToken:tok });
+    if (r.ok) {
+      S.sesi = tok; S.nama = r.nama; S.id = r.idKaryawan;
+      await goToMalam(); return;
+    }
+    localStorage.removeItem('sesi');
+  }
+});
+
+function setGreeting() {
+  const h = new Date().getHours();
+  const kata = h < 12 ? 'pagi' : h < 15 ? 'siang' : h < 18 ? 'sore' : 'malam';
+  document.getElementById('pilih-title').innerHTML = `Selamat <em>${kata}</em>`;
+  document.getElementById('pilih-date').textContent =
+    new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+}
+
+// ── API ──
+async function api(p) {
+  const url = new URL(SCRIPT_URL);
+  Object.entries(p).forEach(([k,v]) => url.searchParams.set(k, String(v)));
+  try {
+    const r = await fetch(url.toString());
+    return await r.json();
+  } catch(e) { return { ok:false, error:'Koneksi gagal' }; }
+}
+
+// ── NAVIGATION ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── DAFTAR NAMA ──
+async function loadNama() {
+  const r = await api({ action:'getDaftarNama' });
+  if (!r.ok) return;
+  const sel = document.getElementById('sel-nama');
+  sel.innerHTML = '<option value="">— Pilih namamu —</option>';
+  r.data.forEach(k => {
+    const o = document.createElement('option');
+    o.value = k.id; o.textContent = k.nama; sel.appendChild(o);
+  });
+}
+
+async function lanjutDariPilih() {
+  const sel = document.getElementById('sel-nama');
+  if (!sel.value) { showToast('Pilih namamu dulu'); return; }
+  S.id = sel.value;
+  S.nama = sel.options[sel.selectedIndex].text;
+  localStorage.getItem('reg_' + S.id) ? goToLogin() : goToRegistrasi();
+}
+
+// ── REGISTRASI ──
+function goToRegistrasi() {
+  S.pins.reg = ''; updDots('reg', 0);
+  ['reg-s1','reg-s2','reg-s3'].forEach((id,i) =>
+    document.getElementById(id).style.display = i === 0 ? '' : 'none');
+  showScreen('screen-registrasi');
+}
+
+function regToPin() {
+  const wa = document.getElementById('reg-wa').value.trim();
+  if (!wa || wa.length < 8) { showToast('Isi nomor WhatsApp dulu'); return; }
+  document.getElementById('reg-s1').style.display = 'none';
+  document.getElementById('reg-s2').style.display = '';
+  document.getElementById('s2d').className = 'sdot on';
+  document.getElementById('s2t').className = 'stxt on';
+}
+
+async function regFinish() {
+  const wa = document.getElementById('reg-wa').value.trim();
+  const r = await api({ action:'registrasi', idKaryawan:S.id, wa, pin:S.pins.reg });
+  if (!r.ok) {
+    if (r.error && r.error.includes('sudah terdaftar')) { goToLogin(); return; }
+    document.getElementById('reg-err').textContent = r.error || 'Gagal mendaftar';
+    S.pins.reg = ''; updDots('reg', 0); return;
+  }
+  S.sesi = r.sesiToken; S.nama = r.nama;
+  localStorage.setItem('sesi', r.sesiToken);
+  localStorage.setItem('reg_' + S.id, '1');
+  document.getElementById('reg-s2').style.display = 'none';
+  document.getElementById('reg-s3').style.display = '';
+  document.getElementById('s3d').className = 'sdot on';
+  document.getElementById('s3t').className = 'stxt on';
+}
+
+// ── LOGIN ──
+function goToLogin() {
+  S.pins.login = ''; updDots('login', 0);
+  document.getElementById('login-err').textContent = '';
+  const ini = S.nama.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  document.getElementById('login-av').textContent = ini;
+  document.getElementById('login-nama').textContent = S.nama;
+  showScreen('screen-login');
+}
+
+async function doLogin() {
+  const r = await api({ action:'login', idKaryawan:S.id, pin:S.pins.login });
+  if (!r.ok) {
+    document.getElementById('login-err').textContent = r.error || 'PIN salah';
+    S.pins.login = ''; updDots('login', 0); return;
+  }
+  S.sesi = r.sesiToken; S.nama = r.nama;
+  localStorage.setItem('sesi', r.sesiToken);
+  await goToMalam();
+}
+
+// ── MALAM: FORM RENCANA ──
+async function goToMalam() {
+  showScreen('screen-malam');
+  const tgl = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('malam-title').innerHTML = `<em>${S.nama}</em>`;
+  document.getElementById('malam-sub').textContent = tgl;
+
+  const [rKeg, rStatus] = await Promise.all([
+    api({ action:'getKegiatan' }),
+    api({ action:'getRencanaHariIni', sesiToken:S.sesi }),
+  ]);
+
+  if (rKeg.ok) { S.kegiatan = rKeg.data; renderMalamForm(); }
+
+  if (rStatus.ok && rStatus.sudahSubmit) {
+    document.getElementById('malam-done').style.display = '';
+    document.getElementById('malam-form').style.display = 'none';
+  } else {
+    document.getElementById('malam-done').style.display = 'none';
+    document.getElementById('malam-form').style.display = '';
+  }
+}
+
+function renderMalamForm() {
+  document.getElementById('malam-kegiatan-list').innerHTML = S.kegiatan.map((k, i) => `
+    <div style="margin-bottom:12px">
+      <div class="act-card">
+        <div class="act-name"><span class="act-dot"></span>${k.nama}</div>
+        <div style="font-size:11px;color:var(--n-muted);margin-bottom:8px">
+          Tulis siapa / apa / bagaimana yang akan kamu lakukan malam ini:
+        </div>
+        <textarea class="n-textarea" id="det-${i}"
+          placeholder="Ceritakan secara spesifik..."></textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function submitRencana() {
+  const btn = document.getElementById('btn-simpan-malam');
+  const detil = S.kegiatan.map((k, i) => ({
+    idKegiatan: k.id,
+    namaUmum: k.nama,
+    detail: document.getElementById('det-' + i).value.trim(),
+  }));
+  if (detil.some(d => !d.detail)) { showToast('Isi semua kegiatan dulu'); return; }
+
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+  const r = await api({ action:'simpanRencana', sesiToken:S.sesi, detil:JSON.stringify(detil) });
+  if (!r.ok) { showToast(r.error || 'Gagal menyimpan'); btn.disabled = false; btn.textContent = 'Simpan rencana malam ini'; return; }
+
+  document.getElementById('malam-done').style.display = '';
+  document.getElementById('malam-form').style.display = 'none';
+  showToast('Rencana tersimpan ✓');
+}
+
+// ── SIANG: FORM LAPORAN ──
+async function goToSiang() {
+  showScreen('screen-siang');
+  const kemarin = new Date(Date.now() - 86400000);
+  const tgl = kemarin.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('siang-title').textContent = S.nama;
+  document.getElementById('siang-sub').textContent = 'Laporan untuk ' + tgl;
+
+  // sembunyikan semua panel dulu
+  ['siang-done','siang-locked','siang-form'].forEach(id =>
+    document.getElementById(id).style.display = 'none');
+
+  const [rLapor, rRencana] = await Promise.all([
+    api({ action:'getLaporanKemarin', sesiToken:S.sesi }),
+    api({ action:'getRencanaKemarin', sesiToken:S.sesi }),
+  ]);
+
+  // sudah lapor
+  if (rLapor.ok && rLapor.sudahLapor) {
+    document.getElementById('siang-done').style.display = ''; return;
+  }
+  // tidak ada rencana kemarin → kunci
+  if (!rRencana.ok || !rRencana.data || !rRencana.data.length) {
+    document.getElementById('siang-locked').style.display = ''; return;
+  }
+
+  // ada rencana → tampilkan form
+  S.rencanaKemarin = rRencana.data;
+  renderSiangForm(rRencana.data);
+  document.getElementById('siang-form').style.display = '';
+}
+
+function renderSiangForm(detilList) {
+  document.getElementById('siang-laporan-list').innerHTML = detilList.map((d, i) => `
+    <div class="lap-card">
+      <div class="lap-cat">${d.namaUmum}</div>
+      <div class="lap-question">"${d.detail}"</div>
+      <div class="lap-scale-label">Berapa persen kamu menikmati ini?</div>
+      <div class="lap-input-wrap">
+        <input
+          class="lap-number"
+          type="number" min="1" max="100" step="1"
+          id="lap-val-${i}"
+          placeholder="—"
+          oninput="validateLapInput(this)">
+        <div class="lap-scale-hint">
+          Angka 1–100<br>
+          <span style="font-size:10px">1 = hampir tidak · 100 = sangat menikmati</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function validateLapInput(el) {
+  let v = parseInt(el.value);
+  if (isNaN(v)) return;
+  if (v < 1) el.value = 1;
+  if (v > 100) el.value = 100;
+}
+
+async function submitLaporan() {
+  const btn = document.getElementById('btn-simpan-siang');
+  const hasil = S.rencanaKemarin.map((d, i) => {
+    const v = parseInt(document.getElementById('lap-val-' + i).value);
+    return {
+      idKegiatan: d.idKegiatan,
+      namaUmum: d.namaUmum,
+      detail: d.detail,
+      intensitas: v,
+    };
+  });
+
+  if (hasil.some(h => isNaN(h.intensitas) || h.intensitas < 1 || h.intensitas > 100)) {
+    showToast('Isi semua angka (1–100)'); return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+  const r = await api({
+    action: 'simpanLaporan',
+    sesiToken: S.sesi,
+    hasil: JSON.stringify(hasil),
+    catatan: document.getElementById('lap-catatan').value,
+  });
+
+  if (!r.ok) { showToast(r.error || 'Gagal menyimpan'); btn.disabled = false; btn.textContent = 'Simpan laporan'; return; }
+
+  document.getElementById('siang-form').style.display = 'none';
+  document.getElementById('siang-done').style.display = '';
+  showToast('Laporan tersimpan ✓', true);
+}
+
+function goToMalam() {
+  if (S.sesi) goToNight();
+  else showScreen('screen-pilih');
+}
+async function goToNight() { await goToMalam_inner(); }
+async function goToMalam_inner() {
+  S.kegiatan = [];
+  await goToMalam();
+}
+
+function doLogout() {
+  if (S.sesi) api({ action:'logout', sesiToken:S.sesi });
+  localStorage.removeItem('sesi');
+  S.sesi = null; S.nama = null; S.id = null;
+  showScreen('screen-pilih');
+}
+
+// ── PIN ENGINE ──
+function pinIn(ctx, d) {
+  if (S.pins[ctx].length >= 6) return;
+  S.pins[ctx] += d;
+  updDots(ctx, S.pins[ctx].length);
+  if (S.pins[ctx].length === 6) {
+    setTimeout(() => {
+      if (ctx === 'reg')   regFinish();
+      if (ctx === 'login') doLogin();
+      if (ctx === 'adm')   admDoLogin();
+    }, 160);
+  }
+}
+function pinDel(ctx) {
+  S.pins[ctx] = S.pins[ctx].slice(0, -1);
+  updDots(ctx, S.pins[ctx].length);
+}
+function updDots(ctx, n) {
+  const map = { reg:'reg-dots', login:'login-dots', adm:'adm-dots' };
+  document.getElementById(map[ctx])?.querySelectorAll('.pin-dot')
+    .forEach((d, i) => d.classList.toggle('filled', i < n));
+}
+
+// ── ADMIN ──
+async function admDoLogin() {
+  const r = await api({ action:'adminLogin', pin:S.pins.adm });
+  if (!r.ok) {
+    document.getElementById('adm-login-err').textContent = r.error || 'PIN salah';
+    S.pins.adm = ''; updDots('adm', 0); return;
+  }
+  S.adminToken = r.adminToken;
+  showScreen('screen-admin');
+  admTab('kegiatan');
+}
+function admLogout() { S.adminToken = null; showScreen('screen-pilih'); }
+
+function admTab(tab) {
+  const tabs = ['kegiatan','status','karyawan'];
+  document.querySelectorAll('.a-tab').forEach((t, i) => t.classList.toggle('on', tabs[i] === tab));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+  document.getElementById('adm-' + tab).classList.add('on');
+  if (tab === 'kegiatan') admLoadKeg();
+  if (tab === 'status')   admLoadStatus();
+  if (tab === 'karyawan') admLoadKar();
+}
+
+// admin kegiatan
+async function admLoadKeg() {
+  const r = await api({ action:'adminGetKegiatan', adminToken:S.adminToken });
+  if (!r.ok) return;
+  const aktif = r.data.filter(k => k.status === 'aktif').map(k => k.nama);
+  renderKegEditor(aktif);
+}
+function renderKegEditor(list) {
+  document.getElementById('keg-editor').innerHTML = list.map((n, i) => `
+    <div class="keg-row" id="kr-${i}">
+      <span class="keg-num">${i+1}</span>
+      <input class="a-field" type="text" value="${n}" id="kf-${i}">
+      <span class="keg-del" onclick="kegDel(${i})">×</span>
+    </div>`).join('');
+  window._kc = list.length;
+}
+function kegAdd() {
+  const i = window._kc++;
+  const el = document.getElementById('keg-editor');
+  const row = document.createElement('div');
+  row.className = 'keg-row'; row.id = 'kr-' + i;
+  row.innerHTML = `<span class="keg-num">${i+1}</span><input class="a-field" type="text" placeholder="Nama kegiatan umum..." id="kf-${i}"><span class="keg-del" onclick="kegDel(${i})">×</span>`;
+  el.appendChild(row);
+}
+function kegDel(i) { document.getElementById('kr-' + i)?.remove(); }
+async function kegSave() {
+  const list = Array.from(document.querySelectorAll('[id^="kf-"]')).map(f => f.value.trim()).filter(Boolean);
+  if (!list.length) { showToast('Minimal satu kegiatan'); return; }
+  if (list.length > 3) { showToast('Maksimal 3 kegiatan per malam'); return; }
+  const r = await api({ action:'adminSimpanKegiatan', adminToken:S.adminToken, kegiatan:JSON.stringify(list) });
+  r.ok ? showToast('Kegiatan disimpan ✓') : showToast(r.error || 'Gagal');
+}
+
+// admin status
+async function admLoadStatus() {
+  const r = await api({ action:'adminStatusMalam', adminToken:S.adminToken });
+  if (!r.ok) return;
+  const sudah = r.data.filter(d => d.submitRencana).length;
+  document.getElementById('st-sudah').textContent = sudah;
+  document.getElementById('st-belum').textContent = r.data.length - sudah;
+  document.getElementById('status-list').innerHTML = r.data.map(d => `
+    <div class="check-row">
+      <span class="cdot ${d.submitRencana ? 'cdot-ok' : 'cdot-no'}"></span>
+      <span class="check-name">${d.nama}</span>
+      <span class="check-time">${d.waktuRencana || '–'}</span>
+    </div>`).join('');
+}
+
+// admin karyawan
+let _karAll = [];
+async function admLoadKar() {
+  const r = await api({ action:'adminGetKaryawan', adminToken:S.adminToken });
+  if (!r.ok) return;
+  _karAll = r.data.filter(k => k.status !== 'nonaktif');
+  renderKarTable(_karAll);
+}
+function renderKarTable(data) {
+  const tbody = document.getElementById('kar-tbody');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;font-size:13px;color:var(--a-muted)">Belum ada karyawan</td></tr>'; return; }
+  tbody.innerHTML = data.map(k => `
+    <tr>
+      <td style="font-weight:500">${k.nama}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--a-muted)">${k.wa || '—'}</td>
+      <td><span class="ps ${k.status === 'aktif' ? 'ps-ok' : 'ps-wait'}">${k.status === 'aktif' ? '✓ Aktif' : 'Belum daftar'}</span></td>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="ico-btn" onclick="karReset('${k.id}','${k.nama}')" title="Reset PIN">↺</button>
+        <button class="ico-btn del" onclick="karDel('${k.id}','${k.nama}')" title="Hapus">✕</button>
+      </td>
+    </tr>`).join('');
+  document.getElementById('kar-footer').textContent = `${data.length} karyawan`;
+}
+function karFilter() {
+  const q = document.getElementById('kar-q').value.toLowerCase();
+  renderKarTable(_karAll.filter(k => k.nama.toLowerCase().includes(q)));
+}
+function karModalAdd() {
+  document.getElementById('modal-nama').value = '';
+  document.getElementById('modal-kar').classList.add('open');
+}
+async function karSave() {
+  const nama = document.getElementById('modal-nama').value.trim();
+  if (!nama) { showToast('Isi nama dulu'); return; }
+  const r = await api({ action:'adminTambahKaryawan', adminToken:S.adminToken, nama });
+  if (r.ok) { showToast('Karyawan ditambahkan ✓'); modalClose('modal-kar'); admLoadKar(); }
+  else showToast(r.error || 'Gagal');
+}
+async function karReset(id, nama) {
+  if (!confirm(`Reset PIN ${nama}?`)) return;
+  const r = await api({ action:'adminResetPin', adminToken:S.adminToken, id });
+  r.ok ? (showToast('PIN direset'), admLoadKar()) : showToast(r.error || 'Gagal');
+}
+async function karDel(id, nama) {
+  if (!confirm(`Hapus ${nama}?`)) return;
+  const r = await api({ action:'adminHapusKaryawan', adminToken:S.adminToken, id });
+  r.ok ? (showToast('Karyawan dihapus'), admLoadKar()) : showToast(r.error || 'Gagal');
+}
+function modalClose(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── TOAST ──
+let _tt;
+function showToast(msg, isDay=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isDay ? 'day show' : 'show';
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
