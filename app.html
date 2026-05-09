@@ -587,7 +587,7 @@ body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCYHhq7REqVqyjTfYi8-BHE6wki0wQuGl2N-4pITLtrDkLAskKj1M8J-DU0-rL99aPMQ/exec";
+const SCRIPT_URL = "GANTI_DENGAN_URL_APPS_SCRIPT_DEPLOYMENT";
 
 // ── STATE ──
 const S = {
@@ -720,16 +720,39 @@ async function doLogin() {
   await goToMalam();
 }
 
+// ── MALAM: FORM RENCANA ──
+async function goToMalam() {
+  showScreen('screen-malam');
+  const tgl = new Date().toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+  document.getElementById('malam-title').innerHTML = `<em>${S.nama}</em>`;
+  document.getElementById('malam-sub').textContent = tgl;
+
+  const [rKeg, rStatus] = await Promise.all([
+    api({ action:'getKegiatan' }),
+    api({ action:'getRencanaHariIni', sesiToken:S.sesi }),
+  ]);
+
+  if (rKeg.ok) { S.kegiatan = rKeg.data; renderMalamForm(); }
+
+  if (rStatus.ok && rStatus.sudahSubmit) {
+    document.getElementById('malam-done').style.display = '';
+    document.getElementById('malam-form').style.display = 'none';
+  } else {
+    document.getElementById('malam-done').style.display = 'none';
+    document.getElementById('malam-form').style.display = '';
+  }
+}
+
 function renderMalamForm() {
   document.getElementById('malam-kegiatan-list').innerHTML = S.kegiatan.map((k, i) => `
     <div style="margin-bottom:12px">
       <div class="act-card">
         <div class="act-name"><span class="act-dot"></span>${k.nama}</div>
-        <div style="font-size:11px;color:var(--n-muted);margin-bottom:8px">
-          Tulis siapa / apa / bagaimana yang akan kamu lakukan malam ini:
+        <div style="font-size:13px;color:var(--n-soft);margin-bottom:10px;line-height:1.5">
+          ${k.instruksi || 'Ceritakan secara spesifik apa yang akan kamu lakukan:'}
         </div>
         <textarea class="n-textarea" id="det-${i}"
-          placeholder="Ceritakan secara spesifik..."></textarea>
+          placeholder="Tulis di sini..."></textarea>
       </div>
     </div>
   `).join('');
@@ -931,15 +954,22 @@ function admTab(tab) {
 async function admLoadKeg() {
   const r = await api({ action:'adminGetKegiatan', adminToken:S.adminToken });
   if (!r.ok) return;
-  const aktif = r.data.filter(k => k.status === 'aktif').map(k => k.nama);
+  const aktif = r.data.filter(k => k.status === 'aktif').map(k => ({
+    nama: k.nama, instruksi: k.instruksi || ''
+  }));
   renderKegEditor(aktif);
 }
 function renderKegEditor(list) {
-  document.getElementById('keg-editor').innerHTML = list.map((n, i) => `
-    <div class="keg-row" id="kr-${i}">
-      <span class="keg-num">${i+1}</span>
-      <input class="a-field" type="text" value="${n}" id="kf-${i}">
-      <span class="keg-del" onclick="kegDel(${i})">×</span>
+  document.getElementById('keg-editor').innerHTML = list.map((k, i) => `
+    <div class="keg-row" id="kr-${i}" style="flex-direction:column;align-items:stretch;gap:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="keg-num">${i+1}</span>
+        <input class="a-field" type="text" value="${k.nama}" id="kf-${i}" placeholder="Nama kegiatan umum...">
+        <span class="keg-del" onclick="kegDel(${i})">×</span>
+      </div>
+      <div style="padding-left:26px">
+        <input class="a-field" type="text" value="${k.instruksi}" id="ki-${i}" placeholder="Instruksi untuk karyawan... (contoh: Tuliskan yang dia lakukan sedetil mungkin.)" style="font-size:12px;color:var(--a-muted)">
+      </div>
     </div>`).join('');
   window._kc = list.length;
 }
@@ -948,12 +978,25 @@ function kegAdd() {
   const el = document.getElementById('keg-editor');
   const row = document.createElement('div');
   row.className = 'keg-row'; row.id = 'kr-' + i;
-  row.innerHTML = `<span class="keg-num">${i+1}</span><input class="a-field" type="text" placeholder="Nama kegiatan umum..." id="kf-${i}"><span class="keg-del" onclick="kegDel(${i})">×</span>`;
+  row.style.cssText = 'flex-direction:column;align-items:stretch;gap:6px';
+  row.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="keg-num">${i+1}</span>
+      <input class="a-field" type="text" placeholder="Nama kegiatan umum..." id="kf-${i}">
+      <span class="keg-del" onclick="kegDel(${i})">×</span>
+    </div>
+    <div style="padding-left:26px">
+      <input class="a-field" type="text" placeholder="Instruksi untuk karyawan..." id="ki-${i}" style="font-size:12px;color:var(--a-muted)">
+    </div>`;
   el.appendChild(row);
 }
 function kegDel(i) { document.getElementById('kr-' + i)?.remove(); }
 async function kegSave() {
-  const list = Array.from(document.querySelectorAll('[id^="kf-"]')).map(f => f.value.trim()).filter(Boolean);
+  const namaFields = document.querySelectorAll('[id^="kf-"]');
+  const list = Array.from(namaFields).map((f, i) => ({
+    nama: f.value.trim(),
+    instruksi: (document.getElementById('ki-' + i)?.value || '').trim(),
+  })).filter(k => k.nama);
   if (!list.length) { showToast('Minimal satu kegiatan'); return; }
   if (list.length > 3) { showToast('Maksimal 3 kegiatan per malam'); return; }
   const r = await api({ action:'adminSimpanKegiatan', adminToken:S.adminToken, kegiatan:JSON.stringify(list) });
